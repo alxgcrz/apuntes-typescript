@@ -1047,11 +1047,13 @@ console.log(second); // Prints '2'
 
 <http://www.typescriptlang.org/docs/handbook/functions.html>
 
+Las funciones son la base fundamental de cualquier aplicación en JavaScript. En TypeScript, aunque hay clases, espacios de nombres y módulos, las funciones siguen desempeñando un papel clave en la descripción de cómo hacer las cosas. TypeScript también agrega algunas capacidades nuevas a las funciones estándar de JavaScript para que sea más fácil trabajar con ellas.
+
 ### Tipos de funciones
 
 Javascript soporta dos tipos de funciones:
 
-- Funciones con nombre o _'named functions'_
+- Funciones con nombre o _'named functions'_:
 
 ```typescript
 // 'Named function'
@@ -1060,21 +1062,21 @@ function multiply(x, y) {
 }
 ```
 
-- Funciones anónimas o _'anonymous functions'_
+- Funciones anónimas o _'anonymous functions'_:
 
 ```typescript
 // Anonymous function
 let add = function(x, y) { return x + y; };
 ```
 
-Las funciones anónimas no tienen nombre para hacer referencia a la función pero puede ser asignadas a una variable. Una vez asignada a una variable, puede ser llamadas igual que una función con nombre:
+Las funciones anónimas no tienen un nombre que permita hacer referencia e invocar a la función pero pueden ser asignadas a una variable. Una vez asignada a una variable, puede ser llamada igual que una función con nombre:
 
 ```typescript
 let resultMul = multiply(3, 3);
 let resultAdd = add(3, 3);
 ```
 
-Con TypeScript podemos añadir el tipo de los parámetros o de retorno de la función o dejar que el compilador infiera el tipo:
+Con TypeScript podemos indicar de forma explícita el tipo de los parámetros o el tipo de retorno de la función o dejar que el compilador infiera el tipo:
 
 ```typescript
 // 'Named function'
@@ -1086,7 +1088,7 @@ function multiply(x: number, y: number): number {
 // Anonymous function
 let add: (baseValue: number, increment: number) => number = function(x: number, y: number): number { return x + y; };
 
-// Esta parte '(baseValue: number, increment: number) => number' es el tipo de la variable 'add', es decir es de tipo function.
+// Esta parte '(baseValue: number, increment: number) => number' es el tipo de la variable 'add', es decir es de tipo 'function'.
 ```
 
 ### Parámetros opcionales
@@ -1109,13 +1111,13 @@ console.log(getFullName("Thomas"));
 console.log(getFullName()); // Error: firstName parameter missing
 ```
 
-Es importante hacer notar que los parámetros obligatorios se definirán **antes** de los parámetros opcionales.
+La única regla cuando usamos parámetros opcionales es que los **parámetros obligatorios se definen en primer lugar** y luego se definen los parámetros opcionales.
 
 ### Valores por defecto
 
 <http://www.typescriptlang.org/docs/handbook/functions.html#optional-and-default-parameters>
 
-Hay situaciones en que podemos necesitar que un parámetro tenga un valor por defecto si no se informa un valor en la llamada a la función. Si le asignamos un valor por defecto un parámetro pasa de ser obligatorio a ser opcional debido a que ya no es obligatorio que sea informado:
+Hay situaciones en que podemos necesitar que un parámetro tenga un valor por defecto si no se informa un valor en la llamada a la función. Si le asignamos un valor por defecto a un parámetro pasa de ser obligatorio a ser opcional debido a que ya no es obligatorio que sea informado:
 
 ```typescript
 function getFullName(firstName: string = "John", lastName?: string) {
@@ -1126,15 +1128,18 @@ function getFullName(firstName: string = "John", lastName?: string) {
   }
 }
 
-console.log(getFullName("Thomas", "Huber"));
-console.log(getFullName("Thomas"));
+console.log(getFullName("John", "Doe"));
+console.log(getFullName("John"));
 console.log(getFullName()); // Ahora si podemos hacer una llamada sin parámetros, ya que el obligatorio tiene valor por defecto
+console.log(getFullName(undefined, "Doe"));
 ```
+
+Los parámetros con valor por defecto pueden estar al principio. En ese caso, hacemos la llamada asignando `undefined`.
 
 Si marcamos un parámetro como **opcional y le asignamos un valor por defecto** el compilador arrojará un error en tiempo de compilación:
 
 ```typescript
-// INCORRECTO!!
+// ¡¡INCORRECTO!!
 function getFullName(firstName?: string = "John") {
   // ...
 }
@@ -1192,6 +1197,53 @@ async function main() {
 }
 main();
 ```
+
+## Módulos
+
+Los módulos sirven para estructurar el código en múltiples ficheros `.ts` en vez de escribir todo el código en un único fichero. Cada fichero tendrá su propio ámbito cuando se usan módulos por lo que hay que exportar explícitamente clases o variables para luego ser importadas y utilizadas en otros ficheros.
+
+Los módulos se incluyen de forma nativa en ES2015 y por tanto también están disponibles en TypeScript. Con TypeScript se pueden compilar los módulos para ES5 o ES3.
+
+Además de los módulos, TypeScript tiene soporte para los _'namespaces'_ o espacios de nombre que tiene un objetivo similar. Dado que los espacios de nombre es un concepto de TypeScript y los módulos forman parte de ES2015 se recomienda su uso. En Angular se utiliza el concepto de módulos.
+
+### Basics
+
+Un módulo es un fichero `.ts` si tiene al menos un `import` o un `export` en el nivel raíz del fichero.
+
+La ventaja de aplicar el concepto de módulos es que en los módulos el código se ejecuta en su ámbito y no de forma global, lo que significa que variables, funciones, clases, etc... declaradas dentro de un módulo **sólo** son visibles dentro de ese módulo hasta que no se exportan de forma explícita. A la inversa, para utilizar variables, clases, funciones, etc.. que han sido exportadas en otro módulo tienen que ser importadas para poder ser utilizadas.
+
+Un fichero `.ts` que no contiene ningún `export` o `import` a nivel de fichero se considera un *script* cuyo contenido es de ámbito global y por tanto está disponible de forma general, incluso también para los módulos.
+
+### Export and Import
+
+Cualquier declaración de variable, función, clase, alias o interfaz puede ser exportado añadiendo la palabra clave `export`:
+
+```typescript
+// friends.ts
+class Friend {
+  constructor(public firstName: string) { }
+}
+
+export class Developer extends Friend {
+  constructor(firstName: string, public lastName: string) {
+    super(firstName);
+  }
+}
+```
+
+En el ejemplo tenemos la clase `Developer` que hereda de `Friend`. La clase `Developer` se exporta dado que hemos utilizado la palabra clave `export`. Como tenemos una clase que se exporta, el fichero `friends.ts` es un módulo. La clase `Friend` no se exporta y por tanto sólo es visible dentro de su módulo, o lo que es lo mismo, en el fichero.
+
+Para poder utilizar la clase `Developer` deberemos importarla:
+
+```typescript
+// main.ts
+import { Developer } from './friends';
+
+let dev = new Developer("John", "Doe");
+console.log(dev.firstName); // Prints 'John'
+```
+
+Ahora que el fichero `main.ts` tiene una declaración de `import`, también se considera un módulo.
 
 ## Resumen
 
