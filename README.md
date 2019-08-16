@@ -1206,6 +1206,21 @@ Los módulos se incluyen de forma nativa en ES2015 y por tanto también están d
 
 Además de los módulos, TypeScript tiene soporte para los _'namespaces'_ o espacios de nombre que tiene un objetivo similar. Dado que los espacios de nombre es un concepto de TypeScript y los módulos forman parte de ES2015 se recomienda su uso. En Angular se utiliza el concepto de módulos.
 
+Los navegadores no tienen la capacidad de cargar los módulos por sí mismos, por lo que se necesita un _'module loader'_. Un cargador de módulos recorre todas las dependencias del módulo raíz. Según las declaraciones de importación, un cargador de módulos encontrará todos los archivos `.js` necesarios y los cargará en consecuencia.
+
+Hay muchos formatos de módulos (es2015, commonjs, system, amd, umd). Dependiendo del cargador de módulos utilizado, tendremos que indicar el formato en el fichero `tsconfig.json` para que sean compatibles:
+
+```json
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es5",
+    "noImplicitAny": false,
+    "sourceMap": false
+  }
+}
+```
+
 ### Basics
 
 Un módulo es un fichero `.ts` si tiene al menos un `import` o un `export` en el nivel raíz del fichero.
@@ -1214,7 +1229,7 @@ La ventaja de aplicar el concepto de módulos es que en los módulos el código 
 
 Un fichero `.ts` que no contiene ningún `export` o `import` a nivel de fichero se considera un *script* cuyo contenido es de ámbito global y por tanto está disponible de forma general, incluso también para los módulos.
 
-### Export and Import
+### Export
 
 Cualquier declaración de variable, función, clase, alias o interfaz puede ser exportado añadiendo la palabra clave `export`:
 
@@ -1233,17 +1248,163 @@ export class Developer extends Friend {
 
 En el ejemplo tenemos la clase `Developer` que hereda de `Friend`. La clase `Developer` se exporta dado que hemos utilizado la palabra clave `export`. Como tenemos una clase que se exporta, el fichero `friends.ts` es un módulo. La clase `Friend` no se exporta y por tanto sólo es visible dentro de su módulo, o lo que es lo mismo, en el fichero.
 
+Además de clases e interfaces, también se puede exportar variables y/o funciones:
+
+```typescript
+// friends.ts
+class Friend {
+  constructor(public firstName: string) { }
+}
+
+export let FRIENDS: Friend[] = [
+new Friend("Sara"),
+new Friend("Anna"),
+new Friend("Thomas")];
+
+export function printFriend(friend:Friend){
+  console.log(friend.firstName);
+}
+
+// main.ts
+import { FRIENDS, printFriend } from './friends';
+
+for (let friend of FRIENDS) {
+  printFriend(friend);
+}
+```
+
+#### Export aliases
+
+En determinadas situaciones podemos utilizar un *alias* para nombrar la variable, clase, etc... que va a ser exportada con la palabra clave `as` para por ejemplo evitar conflictos de nombres o evitar que sean visibles los nombres reales:
+
+```typescript
+// ...
+
+class Developer extends Friend {
+  constructor(firstName: string, public lastName: string) {
+    super(firstName);
+  }
+}
+
+export {Developer as Coder};
+```
+
+Cuando en la exportación se utiliza un alias, cuando importemos el módulo en otro módulo sólo será visible el alias y no los nombres reales:
+
+```typescript
+// friends.ts
+export {Developer as Coder};
+
+// main.ts
+import { Coder } from './friends';
+
+let dev = new Coder("John");  // 'Developer' classname is not visible
+```
+
+#### Export multiple types
+
+Hasta ahora hemos exportado una única entidad pero es posible exportar varias clases dentro del mismo fichero `.ts`. Una forma sería exportar cada clase de forma individual o hacer una única exportación múltiple:
+
+```typescript
+class Friend {
+  // ...
+}
+
+/* export */ class Developer extends Friend {
+  // ...
+}
+
+/* export */ class Skateboarder extends Friend {
+  // ...
+}
+
+// Exportación múltiple en un mismo fichero
+export { Developer, Skateboarder };
+```
+
+#### Default export
+
+Cada módulo puede exportar opcionalmente una exportación predeterminada o por defecto. Esta exportación predeterminada se indica con la palabra clave `default` y solo puede haber una exportación por defecto en un módulo:
+
+```typescript
+// friends.ts
+class Friend {
+  constructor(public firstName: string) { }
+}
+
+export default class Developer extends Friend {
+  // ...
+}
+```
+
+Para importar un módulo por defecto no se necesitan las llaves ('{}') ni es necesario usar el nombre empleado en la exportación:
+
+```typescript
+// main.ts
+import Coder from './friends';
+
+let prog = new Coder("John");
+```
+
+En un mismo fichero puede haber una exportación por defecto y otras exportaciones:
+
+```typescript
+// friends.ts
+export class Friend {
+  constructor(public firstName: string) { }
+}
+
+export default class Developer extends Friend {
+  // ...
+}
+
+// main.ts
+import Coder, {Friend} from './friends';
+
+let prog = new Coder("John");
+```
+
+### Import
+
 Para poder utilizar la clase `Developer` deberemos importarla:
 
 ```typescript
 // main.ts
-import { Developer } from './friends';
+import { Developer } from './friends';  // Declaración 'import' con el path del fichero. No es necesario indicar la extensión '.js'
 
 let dev = new Developer("John", "Doe");
 console.log(dev.firstName); // Prints 'John'
 ```
 
-Ahora que el fichero `main.ts` tiene una declaración de `import`, también se considera un módulo.
+Ahora que el fichero `main.ts` tiene una declaración `import`, también se considera un módulo.
+
+#### Import aliases
+
+Al igual que en la exportación, podemos usar *alias* para realizar la importación para por ejemplo evitar conflictos de nombres o mejorar la legibilidad del código:
+
+```typescript
+import { Developer as Programmer } from './friends';
+
+var prog = new Programmer("John");
+```
+
+#### Import multiple types
+
+Cuando importamos múltiples tipos que provienen de un mismo módulo, los separamos con comas:
+
+```typescript
+import { Developer, Skateboarder } from './friends;
+```
+
+En el caso de que sean muchos tipos, podemos optar por realizar la importación del módulo completo usando ('*'). En ese caso tendremos que utilizar un alias para poder hacer referencia a las clases importadas:
+
+```typescript
+import * as Friends from './friends;
+
+var dev = new Friends.Developer("John");
+
+var boarder = new Friends.Skateboarder("Foo");
+```
 
 ## Resumen
 
