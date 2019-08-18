@@ -1406,6 +1406,145 @@ var dev = new Friends.Developer("John");
 var boarder = new Friends.Skateboarder("Foo");
 ```
 
+## Declaration Files
+
+<http://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html>
+<http://microsoft.github.io/TypeSearch/>
+<https://www.npmjs.com/~types>
+<http://definitelytyped.org/>
+
+Cuando se utiliza una biblioteca JavaScript existente, TypeScript no conoce los tipos ya que JavaScript no tiene tipos. Sin tipos, no se obtienen errores en tiempo de compilación ya que TypeScript no puede realizar comprobaciones de tipos.
+
+Es por eso que TypeScript admite archivos de declaración para bibliotecas JavaScript existentes. El archivo de declaración es un archivo TypeScript normal que por convención termina con `d.ts` y contiene las declaraciones de tipo para esta biblioteca.
+
+Por ejemplo, pongamos que tenemos una pequeña biblioteca Javascript con una única función:
+
+```javascript
+// myLibrary.js
+function printFirstName(friend) {
+  document.write("Firstname is " + friend.firstName);
+}
+```
+
+De forma que la podemos utilizar en una página html:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Getting started with TypeScript</title>
+    <script src="myLibrary.js"></script>
+  </head>
+  <body>
+    <p>Hello World!</p>
+  </body>
+</html>
+```
+
+En TypeScript podemos utilizar una librería Javascript dado que TypeScript es un superconjunto de Javascript y el código TypeScript se compila en código Javascript:
+
+```typescript
+// main.ts
+let friend = { firstName: "Thomas" };
+printFirstName(friend);
+```
+
+Este código funciona pero no hay ningún tipo y además TypeScript muestra un error ya que no puede encontrar la función `printFirstName(friend)` en tiempo de compilación. Aún así, si compilamos el código la función sí que existe en tiempo de ejecución y el código funciona perfectamente.
+
+Para deshacerse del error y obtener una escritura estática que permita pasar un parámetro correcto a la función `printFirstName(friend)`, podemos declarar la función `printFirstName(friend Friend)` incluyendo una interfaz para su parámetro, como por ejemplo `Friend`.
+
+### Declarar una función
+
+Podemos declarar una función en TypeScript usando la palabra clave `declare`. De esta forma TypeScript conoce la función, aunque esté implementada en otro sitio como un biblioteca de terceros. Además, con el uso de una interfaz, el compilador puede realizar la comprobación de tipos generando un error en tiempo de compilación:
+
+```typescript
+// main.ts
+interface Friend {
+  firstName: string;
+}
+
+// Declaramos la función para que TypeScript conozca su existencia y su firma
+declare function printFirstName(friend: Friend): void;
+
+let friend = { firstName: "Thomas" };
+printFirstName(friend);
+```
+
+#### Declaraciones en bibliotecas de NPM
+
+Cuando se usan bibliotecas de terceros desde NPM en TypeScript tampoco disponemos de los tipos.
+
+Para usar la biblioteca _'lodash'_ la instalamos vía NPM:
+
+```terminal
+npm install lodash --save
+```
+
+Lo que nos permite usar la biblioteca en nuestro proyecto, como por ejemplo:
+
+```typescript
+import { range } from 'lodash';
+
+let chapters = range(1, 12);
+for (let num in chapters) {
+  console.log(num);
+}
+```
+
+TypeScript no dispone de los tipos con lo cual TypeScript asume que `range(x: any, y:any): any`. Además, tampoco tenemos disponible el autocompletado de IDE ni la documentación, etc...
+
+Para ellos podemos instalar la declaración de tipos de la biblioteca _'lodash'_ disponible en NPM. En NPM están las declaraciones de tipos de la mayoría de bibliotecas de terceros. Se puede consultar el listado desde esta [página](http://microsoft.github.io/TypeSearch/) o buscar en el directorio de [NPM](https://www.npmjs.com/~types)
+
+La declaración de tipos es un fichero que por convención es `d.ts`. Por ejemplo el fichero de _'lodash'_ una vez instalado se encuentra en `node_modules/@types/lodash/index.d.ts`. La declaración de tipos se instala vía NPM:
+
+```terminal
+npm install @types/lodash --save-dev
+```
+
+Una vez instalado TypeScript y el IDE utilizado, como puede ser Visual Studio Code, ahora ya conocen la firma de la función `range()` que es `range(start: number, end: number, step?: number: number[]` lo que permite el autocompletado y la visualización de la documentación.
+
+#### Declaraciones en bibliotecas propias
+
+Para el caso de bibliotecas propias, el compilador de TypeScript puede generar el fichero de declaración de tipos.
+
+Si por ejemplo tenemos la siguiente biblioteca:
+
+```typescript
+// main.ts
+interface Friend {
+  firstName: string;
+}
+
+function printFirstName(friend: Friend) {
+  document.write(friend.firstName);
+}
+```
+
+Para generar el fichero de declaración de tipos, se indica en el fichero `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": false,
+    "sourceMap": false,
+    "declaration": true
+  }
+}
+```
+
+De esta forma, el compilador TypeScript no sólo generará el fichero `main.js` a partir del fichero `main.ts` sino que también generará el fichero `main.d.ts` que contendrá la declaración de la función y su tipo:
+
+```typescript
+// main.d.ts
+interface Friend {
+  firstName: string;
+}
+
+declare function printFirstName(friend: Friend): void;
+```
+
 ## Resumen
 
 ```typescript
