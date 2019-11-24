@@ -2,7 +2,9 @@
 
 TypeScript es un lenguaje cuyo objetivo es facilitar el desarrollo de aplicaciones a gran escala escritas en JavaScript. TypeScript añade conceptos comunes como clases, módulos, interfaces, genéricos y (opcionalmente) tipado estático a JavaScript. Es un superset de JavaScript: todo el código JavaScript es código válido en TypeScript de manera que se puede integrar fácilmente a cualquier proyecto. El compilador TypeScript emite código JavaScript válido y entendible por cualquier navegador que soporte Javascript.
 
-Una forma de instalar TypeScript es via NPM: `npm install -g typescript`
+Una forma de instalar TypeScript es via _NPM_: `npm install -g typescript`
+
+Podemos comprobar la versión de Typescript instalada: `tsc -v`
 
 ## Usando TypeScript
 
@@ -33,13 +35,13 @@ Creamos un fichero `index.html` y en la etiqueta `<body>` incluiremos la etiquet
 </html>
 ```
 
-Para abrir el fichero html en el navegador podemos hacer doble click en el 'Explorador de ficheros' de Windows o desde el terminal (Ctrl + J) de Visual Studio Code escribir `start index.html`.
+Para abrir el fichero `index.html` en el navegador podemos hacer doble click en el _'Explorador de ficheros'_ de Windows o desde el terminal ('Ctrl + J') de Visual Studio Code escribir `'start index.html'`.
 
 Para seguir con el ejercicio, renombramos el fichero Javascript a `main.ts`. Esto indica al compilador de TypeScript que `main.ts` es un fichero que contiene código TypeScript y que deberá compilarlo a código Javascript. El compilador creará un fichero `main.js` con el código compilado a Javascript válido y entendible por cualquier navegador.
 
-Para compilar un fichero TypeScript escribimos en el terminal `tsc main.ts`.
+Para compilar un fichero TypeScript escribimos en el terminal `'tsc main.ts'`.
 
-Para no tener que compilar un fichero TypeScript cada vez que realicemos cambios, podemos arrancar el compilador TypeScript en modo _'watch'_ con `tsc main.ts -w` de forma que compilará el fichero TypeScript cada vez que detecte un cambio. Podemos finalizar el proceso pulsando 'Ctrl + C':
+Para no tener que compilar un fichero TypeScript cada vez que realicemos cambios, podemos arrancar el compilador TypeScript en modo _'watch'_ con `'tsc main.ts -w'` de forma que compilará el fichero TypeScript cada vez que detecte un cambio. Podemos finalizar el proceso pulsando 'Ctrl + C':
 
 ```terminal
 tsc main.ts
@@ -77,9 +79,9 @@ Para inicializar un fichero `tsconfig.json` en un proyecto con TypeScript, escri
 }
 ```
 
-Con la opción `target` le indicamos al compilador de TypeScript que versión de Javascript tiene que cumplir el código Javascript que genere al compilar código TypeScript.
+Con la opción `target` le indicamos al compilador de TypeScript que versión de Javascript tiene que cumplir el código Javascript que genere al compilar el código.
 
-Es importante indicar que cuando se utiliza un fichero `tsconfig.json` con las opciones de compilación, no debemos indicar el nombre del fichero con el código Typescript:
+Es importante indicar que cuando se utiliza un fichero `tsconfig.json` con las opciones de compilación, no debemos indicar el nombre del fichero con el código Typescript que vamos a compilar:
 
 ```typescript
 // Hacemos uso de las opicines del fichero 'tsconfig.json' al compilar nuestro fichero 'main.ts'
@@ -113,6 +115,8 @@ printFirstNames([
 
 Para depurar el código TypeScript en el navegador, debemos utilizar un fichero `*.map` de forma que el navegador pueda relacionar el código Javascript que está ejecutando con el código fuente escrito en TypeScript. Para que el compilador TypeScript genere este fichero lo indicamos con `"sourceMap": true` en el fichero de configuración `tsconfig.json`.
 
+Disponemos de varios editores online o _playground_ para escribir y probar código escrito en TypeScript como puede ser el [editor oficial](http://www.typescriptlang.org/play/index.html) o un editor multilenguaje como [repl.it](https://repl.it/languages/typescript).
+
 Más información:
 
 - [TypeScript in 5 minutes](http://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
@@ -120,8 +124,6 @@ Más información:
 - [Learn TypeScript](https://learnxinyminutes.com/docs/es-es/typescript-es/)
 
 ## Tipos básicos
-
-<http://www.typescriptlang.org/docs/handbook/basic-types.html>
 
 Para que los programas sean útiles, debemos poder trabajar con algunas de las unidades de datos más simples: números, cadenas, estructuras, valores booleanos y similares. En TypeScript, se admite la mayoría de los tipos que se esperaría en JavaScript.
 
@@ -156,6 +158,8 @@ isVisible = true; // assignment of bool
 isVisible = "hidden"; // Error: string not assignable to boolean
 ```
 
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/basic-types.html)
+
 ### _`Boolean`_
 
 El tipo de datos más básico es el tipo `boolean` que admite los valores 'true/false':
@@ -166,7 +170,7 @@ let isDone: boolean = false;
 
 ### _`Number`_
 
-Dado que TypeScript es un superconjunto de JavaScript, todos los números en TypeScript son números de 64bits en punto flotante. Estos números de punto flotante obtienen el tipo `number`. Además de los literales hexadecimales y decimales, TypeScript también admite literales binarios y octales introducidos en ECMAScript 2015.
+Dado que TypeScript es un superconjunto de JavaScript, todos los números en TypeScript son números de 64bits en punto flotante. Estos números de punto flotante obtienen el tipo `number`. Además de los literales hexadecimales y decimales, TypeScript también admite literales binarios y octales introducidos en la especificación ES2015.
 
 ```typescript
 let width: number = 2;
@@ -192,19 +196,21 @@ TypeScript tiene soporte para los _'template strings'_ como en Kotlin, que puede
 ```typescript
 let fullName: string = `Bob Bobbington`;
 let age: number = 37;
+
+// Cadena de tipo 'string' de varias líneas y con una expresión incrustada.
 let sentence: string = `Hello, my name is ${fullName}.
 
 I'll be ${age + 1} years old next month.`;
 ```
 
-Esto es equivalente a declarar la variable `sentence` de esta forma, que es la forma clásica de concatenación que es la forma que se genera cuando el compilador compila el código TypeScript en código Javascript:
+La forma anterior es equivalente a declarar la variable `sentence` de la siguiente forma, que es la forma clásica de concatenación y que en última instancia es la forma que se genera cuando el compilador compila el código TypeScript en código Javascript (dependiendo del _target_):
 
 ```javascript
 let sentence: string = "Hello, my name is " + fullName + ".\n\n" +
     "I'll be " + (age + 1) + " years old next month.";
 ```
 
-Cuando se compila a ES2015 o posterior, los _'template strings'_ están soportados nativamente, por lo que si en el fichero `tsconfig.json` le indicamos al compilador que el target sea 'es2015' el código Javascript compilado será el mismo que el código Typescript. Se puede consultar el formato del fichero `tsconfig.json` [aquí](http://json.schemastore.org/tsconfig).
+Cuando se compila a ES2015 o posterior, los _'template strings'_ están soportados nativamente, por lo que si en el fichero `tsconfig.json` le indicamos al compilador que el _target_ sea 'es2015' el código Javascript compilado será el mismo que el código Typescript. Se puede consultar el formato del fichero `tsconfig.json` [aquí](http://json.schemastore.org/tsconfig).
 
 ### Array
 
@@ -370,12 +376,12 @@ let isVisible: boolean | number = true;
 console.log(isVisible.length); // El compilador genera un error en tiempo de compilación ya que el tipo 'boolean' no tiene la propiedad 'length'
 
 isVisible = "Yes, is visible";
-console.log(isVisible.length); // Ahora el compilador no genera ningún error ya que ahora la variable almacena un 'string' que sí tiene la propiedad 'lenght'
+console.log(isVisible.length); // Ahora el compilador no genera ningún error ya que ahora la variable almacena un 'string' que sí tiene la propiedad 'length'
 ```
 
 ### Void
 
-El tipo `void` es un poco como lo opuesto a `any`, es decir es la ausencia de tener un tipo. Normalmente se utiliza como tipo de retorno de funciones que no devuelven un valor:
+El tipo `void` es la ausencia de tener un tipo. Normalmente se utiliza como tipo de retorno de funciones que no devuelven un valor:
 
 ```typescript
 function warnUser(): void {
@@ -399,7 +405,7 @@ let unusable: void = undefined;
 
 ### 'Null' and 'Undefined'
 
-Indefinido y nulo son valores que en JavaScript que conducen a muchos errores. En TypeScript, tanto indefinido como nulo en realidad tienen sus propios tipos llamados `undefined` y `null` respectivamente. Al igual que `void`, no son extremadamente útiles por sí solos:
+Indefinido y nulo son valores que en JavaScript que conducen a muchos errores. En TypeScript, tanto los valores indefinidos como los valores nulos en realidad tienen sus propios tipos llamados `undefined` y `null` respectivamente. Al igual que `void`, no son extremadamente útiles por sí solos:
 
 ```typescript
 // Not much else we can assign to these variables!
@@ -415,13 +421,13 @@ firstName = null; // OK
 firstName = undefined; // OK
 ```
 
-Sin embargo, cuando se usa el indicador `--strictNullChecks` o `"strictNullChecks": true` en el fichero `tsconfig.json`, `null` y `undefined` ya no se comportan como subtipos del todos los demas tipos y sólo se pueden asignar a una variable de uno de sus tipos respectivos (la única excepción es que `undefined` también se puede asignar a `void`).
+Sin embargo, cuando se usa el indicador `--strictNullChecks` o `"strictNullChecks": true` en el fichero `tsconfig.json`, los tipos `null` y `undefined` ya no se comportan como subtipos de todos los demás tipos y sólo se pueden asignar a una variable de uno de sus tipos respectivos (la única excepción es que `undefined` también se puede asignar a `void`).
 
 ### Never
 
-El tipo `never` representa el tipo de valores que nunca ocurren. Por ejemplo, `never` es el tipo de retorno para una expresión de función o una expresión de función de flecha que siempre arroja una excepción o una que nunca devuelve.
+El tipo `never` representa el tipo de valores que nunca ocurren. Por ejemplo, `never` es el tipo de retorno para una expresión de función o una expresión de función de flecha que siempre arroja una excepción o una que nunca devuelve un valor.
 
-El tipo `never` es un subtipo de cada tipo y por tanto es asignable a todos los tipos. Sin embargo, ningún tipo es un subtipo de `never` ni asignable a `never` excepto sí mismo. Incluso `any` no es asignable a `never`.
+El tipo `never` es un subtipo de cada tipo y por tanto es asignable a todos los demás tipos. Sin embargo, ningún tipo es un subtipo de `never` ni asignable a `never` excepto sí mismo. Incluso `any` no es asignable a `never`.
 
 ```typescript
 // Function returning never must have unreachable end point
@@ -442,7 +448,7 @@ function infiniteLoop(): never {
 
 ### Object
 
-`object` es un tipo que representa el tipo no primitivo, es decir, cualquier cosa que no sea `number`, `string`, `boolean`, `symbol`, `null`, o `undefined`.
+`Object` es un tipo que representa el tipo no primitivo, es decir, cualquier cosa que no sea `number`, `string`, `boolean`, `symbol`, `null`, o `undefined`.
 
 ```typescript
 declare function create(o: object | null): void;
@@ -458,9 +464,15 @@ create(undefined); // Error
 
 ### Aserciones de tipo
 
-Una aserción de tipo es como una conversión de tipo en otros lenguajes, pero no realiza ninguna verificación especial o reestructuración de datos.
+Una aserción de tipo es como una conversión de tipo en otros lenguajes, pero no realiza ninguna verificación especial o reestructuración de datos. Se utiliza la palabra clave `as`:
 
-No tiene impacto en el tiempo de ejecución, y es utilizado exclusivamente por el compilador. TypeScript asume que se han realizado las comprobaciones necesarias. Además, al utilizar la aserción de tipo podemos usar el autocompletado de cualquier editor:
+```typescript
+let someValue: any = "this is a string";
+
+let strLength: number = (someValue as string).length;
+```
+
+No tiene impacto en el tiempo de ejecución, y es utilizado exclusivamente por el compilador. TypeScript asume que se han realizado las comprobaciones necesarias. Además, al utilizar la aserción de tipo nos podemos valer del autocompletado de cualquier editor:
 
 ```typescript
 let someValue: any = "this is a string";
@@ -471,11 +483,11 @@ let strLength: number = (someValue as string).length; // Ahora, si escribimos ma
 
 ## Declaración de variables
 
-Las variables en JavaScript siempre se han declarado con la palabra clave `var`. En ES2015 se introdujeron las nuevas palasbras clave `let` y `const`, que por supuesto también están disponibles en TypeScript. Se recomienda usar `let` y `const` en lugar de `var`.
+Las variables en JavaScript siempre se han declarado con la palabra clave `var`. En la especificación ES2015 se introdujeron las nuevas palabras clave `let` y `const`, que por supuesto también están disponibles en TypeScript. Se recomienda usar `let` y `const` en lugar de `var`.
 
 ### `var` vs `let`
 
-`let` permite declarar variables limitando su alcance (scope) al bloque, declaración, o expresión donde se está usando. Lo anterior diferencia `let` de la palabra clave `var`, la cual define una variable global o local en una función sin importar el ámbito del bloque.
+`let` permite declarar variables limitando su alcance (_scope_) al bloque, declaración, o expresión donde se está usando. Lo anterior diferencia `let` de la palabra clave `var`, la cual define una variable global o local en una función sin importar el ámbito del bloque.
 
 La declaración de variables con `let` y `const` es similar a `var`. Tan sólo hay que cambiar la palabra clave:
 
@@ -490,9 +502,9 @@ La diferencia, como hemos visto, radica en el alcance de cada variable según co
 
 #### Alcance de bloque
 
-Las variables declaradas con `var` tienen un alcance de función o _'function-scoped'_ mientras que las variables declaras con `let` tienen un alcance de bloque o _'block-scoped'_ que es más parecido a Java.
+Las variables declaradas con `var` tienen un alcance de función o _'function-scoped'_ mientras que las variables declaradas con `let` tienen un alcance de bloque o _'block-scoped'_ que es más parecido a Java.
 
-En el ejemplo tenemos una variable declarada con `var` dentro del ámbito de un `if`. Debido a que la hemos declarado con un `var`, la variable es accesible en cualquier punto de la función y por tanto 'sale' fuera del ámbito del `if` donde fue declarada:
+En el ejemplo tenemos una variable declarada con `var` dentro del ámbito de un `if`. Debido a que la hemos declarado con un `var`, la variable es accesible desde cualquier punto de la función y por tanto _'sale'_ fuera del ámbito del `if` donde fue declarada:
 
 ```typescript
 function getNumber(init) {
@@ -537,7 +549,7 @@ let firstName: string = "Thomas"; // Compile-time error
 let firstName: string = "Julia"; // Compile-time error
 ```
 
-En cambio sí que podemos declarar variables con el mismo nombre usando `let` pero en diferentes bloques. Este concepto se llama _'shadowing'_ y significa que el bloque más interior 'oculta' la variable más exterior. Aún teniendo el mismo nombre, son variables diferentes y que pueden tener valores diferentes. Por tanto, según en el bloque que nos encontremos tendremos acceso a una u otra variable:
+En cambio sí que podemos declarar variables con el mismo nombre usando `let` pero en diferentes bloques. Este concepto se llama _'shadowing'_ y significa que el bloque más interior _'oculta'_ la variable más exterior. Aún teniendo el mismo nombre, son variables diferentes y que pueden tener valores diferentes. Por tanto, según en el bloque que nos encontremos tendremos acceso a una u otra variable:
 
 ```typescript
 let firstName: string = "Thomas";
@@ -587,7 +599,7 @@ friend.lastName = "Huber"; // OK
 friend = { firstName: "x", lastName: "y" }; // Error: friend is const
 ```
 
-## Interfaces and Classes
+## Interfaces y clases
 
 En TypeScript se pueden emplear construccciones orientadas a objetos como interfaces, clases y herencia. Las clases forman parte de la especificación ES2015 pero las interfaces siguen siendo un concepto disponible sólo en TypeScript.
 
@@ -635,9 +647,11 @@ console.log(getFullName({})); // Error: firstName is missing
 console.log(getFullName(25)); // Error: Argument of type '25' is not assignable to parameter of type 'Friend'
 ```
 
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/interfaces.html)
+
 #### Propiedades de sólo lectura
 
-Se puede definir propiedades de sólo lectura con la palabra clave `readonly`. Una propiedad de sólo lectura debe inicializarse en su declaración.
+Se puede definir propiedades de sólo lectura con la palabra clave `readonly`. Una propiedad de sólo lectura debe inicializarse en su declaración:
 
 ```typescript
 interface Developer {
@@ -647,7 +661,7 @@ interface Developer {
 
 #### Implementar una interfaz
 
-Las clases en TypeScript pueden implementar una o varias interfaces usando la palabra clave `implements`. Para implementar varias interfaces, se separan los nombres con comas:
+Las clases en TypeScript pueden implementar una o varias interfaces usando la palabra clave `implements`. Para implementar varias interfaces, se separan los nombres con comas.  En el ejemplo la clase `Friend` implementa la interfaz `Person`:
 
 ```typescript
 interface Person {
@@ -695,7 +709,7 @@ class Friend {
 
 En el ejemplo tenemos una interfaz con una propiedad de tipo `boolean` y una clase con la misma propiedad y el mismo tipo `boolean`. La única diferencia es que una es un interfaz y la otra es una clase pero estructuralmente son iguales ya que tienen la misma propiedad.
 
-En TypeScript podremos usar la clase `Friend` en aquellos lugares donde se requiera un objeto de tipo `Developer` ya que ambos son estructuralmente iguales y sin que la clase `Friend` hay implementado la interfaz `Developer`:
+En TypeScript podremos usar la clase `Friend` en aquellos lugares donde se requiera un objeto de tipo `Developer` ya que ambos son estructuralmente iguales y sin que la clase `Friend` haya implementado la interfaz `Developer`:
 
 ```typescript
 let dev: Developer = new Friend(); // OK, because property exists
@@ -737,9 +751,11 @@ let friend1 = new Friend("Thomas", "Huber");
 let friend2 = new Friend("Julia");      // se omite el parámetro opcional 'lastName'
 ```
 
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/classes.html)
+
 #### Constructor
 
-TypeScript sólo permite **un sólo constructor** a diferencia de C# o Java. El mecanismo para poder crear objetos de forma flexible con un único constructor es mediante los parámetros opcionales y los valores por defecto para los parámetros.
+TypeScript sólo permite **un único constructor** a diferencia de C# o Java. El mecanismo para poder crear objetos de forma flexible con un único constructor es mediante los parámetros opcionales y los valores por defecto para los parámetros.
 
 Pongamos por ejemplo una clase Java con tres constructores que admiten uno, dos y tres parámetros para construir un objeto de ese tipo, siendo sólamente uno de los parámetros requerido ya que se repite en los tres constructores:
 
@@ -793,8 +809,6 @@ console.log(friend.knowsTypeScript); // Prints 'true' que es el valor por defect
 
 #### Propiedades en los parámetros del constructor
 
-<http://www.typescriptlang.org/docs/handbook/classes.html#parameter-properties>
-
 _'Parameter properties'_ es una forma directa en TypeScript de definir propiedades de forma implícita que serán definidas e inicializadas por el compilador a partir de los parámetros del constructor.
 
 Para indicar al compilador que es un _'parameter property'_ se añade el modificador de visibilidad al parámetro en el constructor. El compilador definirá e inicializará una propiedad con el mismo nombre que el parámetro de forma automática:
@@ -817,11 +831,11 @@ class Friend {
 }
 ```
 
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/classes.html#parameter-properties)
+
 #### 'Getters/Setters'
 
-<http://www.typescriptlang.org/docs/handbook/classes.html#accessors>
-
-TypeScript admite _'getters/setters'_ como una forma de interceptar accesos a un miembro de un objeto como ocurre en C#. La única limitación es que tenemos que indicar un target **ES5** o superior. En 'ES3' o inferior no está soportado.
+TypeScript admite _'getters/setters'_ como una forma de interceptar accesos a un miembro de un objeto como ocurre en C#. La única limitación es que tenemos que indicar un _target 'ES5'_ o superior. En la especificación _'ES3'_ o inferior no está soportado.
 
 ```typescript
 class Friend {
@@ -857,6 +871,8 @@ console.log(friend.firstName); // OK
 friend.firstName = "Julia"; // Error, as property is readonly
 ```
 
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/classes.html#accessors)
+
 #### Propiedades de sólo lectura
 
 Se puede definir propiedades de sólo lectura con la palabra clave `readonly`. Una propiedad de sólo lectura debe inicializarse en su declaración o en el constructor. En otros lugares no se puede asignar un nuevo valor.
@@ -874,13 +890,11 @@ class Friend {
 
 class Friend {
   // Parameter property
-  constructor(public readonly firstName: string) { }
+  constructor(public readonly firstName: string) {}
 }
 ```
 
 #### Propiedades estáticas
-
-<http://www.typescriptlang.org/docs/handbook/classes.html#static-properties>
 
 TypeScript admite propiedades estáticas. Las propiedades estáticas pertenecen a la clase y no a una instancia de la clase. Eso significa que su valor existe solo una vez, sin importar cuántas instancias se creen de la clase.
 
@@ -898,9 +912,9 @@ new Friend();
 console.log(Friend.friendCounter); // Logs 3
 ```
 
-### Modificadores de acceso
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/classes.html#static-properties)
 
-<http://www.typescriptlang.org/docs/handbook/classes.html#public-private-and-protected-modifiers>
+### Modificadores de acceso
 
 Por defecto, todos los miembros de una clase como propiedades, métodos y el constructor son **públicos** en TypeScript. El modificador `public` significa que se puede acceder a cualquier miembro de una clase que sea público desde fuera de esa clase. Se puede marcar como `public` de forma explícita, pero no es necesario salvo por legibilidad.
 
@@ -910,15 +924,15 @@ Los modificadores de acceso son muy parecidos a Java:
 - `private` -> miembro sólo visible dentro de la clase y no fuera de ella.
 - `protected` -> miembro sólo visible dentro de la clase y en las subclases, pero no fuera de ella.
 
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/classes.html#public-private-and-protected-modifiers)
+
 ### Herencia
 
-<http://www.typescriptlang.org/docs/handbook/classes.html#inheritance>
-
-TypeScript tiene soporte para la herencia, uno de los pilares de la **Programación Orientada a Objetos**. Al igual que Java se usa la palabra reservada `extends` para heredar de una clase existente:
+TypeScript tiene soporte para la herencia, uno de los pilares de la **"Programación Orientada a Objetos"**. Al igual que Java se usa la palabra reservada `extends` para heredar de una clase existente:
 
 ```typescript
 class Friend {
-  constructor(public firstName: string) { }
+  constructor(public firstName: string) {}
 }
 
 class Developer extends Friend {
@@ -928,11 +942,11 @@ class Developer extends Friend {
 
 La subclase tiene sus propiedades y las propiedades heredadas de la clase padre.
 
-Para instancia una subclase se utiliza el constructor de la clase padre o su propio constructor si lo tiene definido. La única regla es que el constructor de la subclase **debe llamar al constructor de la superclase**. Para ello se utiliza la palabra reservada `super()`:
+Para instanciar una subclase se utiliza el constructor de la clase padre o su propio constructor si lo tiene definido. La única regla es que el constructor de la subclase **debe llamar al constructor de la superclase**. Para ello se utiliza `super()`:
 
 ```typescript
 class Friend {
-  constructor(public firstName: string) { }
+  constructor(public firstName: string) {}
 }
 
 class Developer extends Friend {
@@ -944,17 +958,17 @@ class Developer extends Friend {
 }
 ```
 
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/classes.html#inheritance)
+
 ### Clases abstractas
 
-<http://www.typescriptlang.org/docs/handbook/classes.html#abstract-classes>
-
-TypeScript tiene soporte para el concepto de clases abstractas. Con una clase abstracta se fuerza a la subclase que implemente los métodos abstractos.
+TypeScript tiene soporte para el concepto de clases abstractas. Con una clase abstracta se fuerza a la subclase a que implemente los métodos abstractos.
 
 Para crear una clase abstracta se utiliza la palabra reservada `abstract`. Los métodos abstractos que tienen que ser implementados también se marcan con la palabra `abstract`.
 
 ```typescript
 abstract class Friend {
-  constructor(public firstName: string) { }
+  constructor(public firstName: string) {}
   abstract sayHello(): void;
 }
 
@@ -969,20 +983,22 @@ let dev: Developer = new Developer("John");
 dev.sayHello();  // Prints 'Hi, I'm John
 ```
 
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/classes.html#abstract-classes)
+
 ### El operador 'instanceof'
 
-Para saber si un objeto es de un tipo utilizamos el operador `instanceof`. Al igual que Kotlin y su _'smart cast'_ una vez hemos hecho la comprobación de tipo en un if, podemos usar el objeto dentro del bloque sin realizar una aserción de tipo:
+Para saber si un objeto es de un tipo utilizamos el operador `instanceof`. Al igual que Kotlin y su _'smart cast'_ una vez hemos hecho la comprobación de tipo en un `if`, podemos usar el objeto dentro del bloque sin realizar una aserción de tipo, es decir, sin utilizar `as`:
 
 ```typescript
 class Friend {
-  constructor(public firstName: string) { }
+  constructor(public firstName: string) {}
 }
 
 class Developer extends Friend {
   knowsTypeScript: boolean;
 }
 
-class ExcelGuru extends Friend{ }
+class ExcelGuru extends Friend {}
 
 // La variable recibe un objeto y no sabemos si es un 'Developer' o un 'ExcelGuru'
 let friend: Friend = methodReturnsOneDeveloperOrExcelGuru();
@@ -998,7 +1014,7 @@ if(friend instanceof Developer) {
 
 ### Desestructurando objetos
 
-Al igual que Kotlin, TypeScript permite desestructurar objetos, permitiendo extraer una o más propiedades de un objeto con una notación más compacta. Podemos asignar los valores de las propiedades a variables nuevas o utilizar los mismos nombres de las propiedades como nombres de variable:
+Al igual que Kotlin, TypeScript permite desestructurar objetos, lo que significa que podemos extraer una o más propiedades de un objeto con una notación más compacta. Podemos asignar los valores de las propiedades a variables nuevas o utilizar los mismos nombres de las propiedades como nombres de variable:
 
 ```typescript
 class Friend {
@@ -1011,7 +1027,7 @@ let friend = new Friend("John","Doe",true);
 let surname = friend.lastName;
 let isDev = friend.isDeveloper;
 
-// Desestructurar un objeto en las variables 'surname' y 'isDev' de forma compacta
+// Desestructurar un objeto en las nuevas variables 'surname' y 'isDev' de forma compacta
 let {lastName: surname, isDeveloper: isDev} = friend;
 console.log(surname);
 console.log(isDev);
@@ -1045,9 +1061,9 @@ console.log(second); // Prints '2'
 
 ## Funciones
 
-<http://www.typescriptlang.org/docs/handbook/functions.html>
-
 Las funciones son la base fundamental de cualquier aplicación en JavaScript. En TypeScript, aunque hay clases, espacios de nombres y módulos, las funciones siguen desempeñando un papel clave en la descripción de cómo hacer las cosas. TypeScript también agrega algunas capacidades nuevas a las funciones estándar de JavaScript para que sea más fácil trabajar con ellas.
+
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/functions.html)
 
 ### Tipos de funciones
 
@@ -1069,11 +1085,11 @@ function multiply(x, y) {
 let add = function(x, y) { return x + y; };
 ```
 
-Las funciones anónimas no tienen un nombre que permita hacer referencia e invocar a la función pero pueden ser asignadas a una variable. Una vez asignada a una variable, puede ser llamada igual que una función con nombre:
+Las funciones anónimas no tienen un nombre que permita hacer referencia a la función y así poder invocarla pero pueden ser asignadas a una variable. Una vez asignada a una variable, puede ser llamada igual que una función con nombre:
 
 ```typescript
-let resultMul = multiply(3, 3);
-let resultAdd = add(3, 3);
+let resultMul = multiply(3, 3); // Función con nombre
+let resultAdd = add(3, 3); // Función anónima asignada a la variable 'add'
 ```
 
 Con TypeScript podemos indicar de forma explícita el tipo de los parámetros o el tipo de retorno de la función o dejar que el compilador infiera el tipo:
@@ -1084,7 +1100,6 @@ function multiply(x: number, y: number): number {
   return x * y;
 }
 
-
 // Anonymous function
 let add: (baseValue: number, increment: number) => number = function(x: number, y: number): number { return x + y; };
 
@@ -1093,9 +1108,7 @@ let add: (baseValue: number, increment: number) => number = function(x: number, 
 
 ### Parámetros opcionales
 
-<http://www.typescriptlang.org/docs/handbook/functions.html#optional-and-default-parameters>
-
-En Javascript se pueden omitir parámetros en la llamada de la función pero en TypeScript no se puede. Si una parámetro no es obligatorio podemos marcarlo como **parámetro opcional** y así obviarlo en la llamada. Para ello usamos '?' después del nombre del parámetro:
+En Javascript se pueden omitir parámetros en la llamada de la función mientras que en TypeScript no se puede. Si una parámetro no es obligatorio podemos marcarlo como **parámetro opcional** y así obviarlo en la llamada. Para ello usamos el signo de interrogación '?' después del nombre del parámetro:
 
 ```typescript
 function getFullName(firstName: string, lastName?: string) {
@@ -1113,9 +1126,9 @@ console.log(getFullName()); // Error: firstName parameter missing
 
 La única regla cuando usamos parámetros opcionales es que los **parámetros obligatorios se definen en primer lugar** y luego se definen los parámetros opcionales.
 
-### Valores por defecto
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/functions.html#optional-and-default-parameters)
 
-<http://www.typescriptlang.org/docs/handbook/functions.html#optional-and-default-parameters>
+### Valores por defecto
 
 Hay situaciones en que podemos necesitar que un parámetro tenga un valor por defecto si no se informa un valor en la llamada a la función. Si le asignamos un valor por defecto a un parámetro pasa de ser obligatorio a ser opcional debido a que ya no es obligatorio que sea informado:
 
@@ -1145,9 +1158,9 @@ function getFullName(firstName?: string = "John") {
 }
 ```
 
-### Número variable de parámetros
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/functions.html#optional-and-default-parameters)
 
-<http://www.typescriptlang.org/docs/handbook/functions.html#rest-parameters>
+### Número variable de parámetros
 
 En determinadas situaciones podemos necesitar que una función acepte un número variable de parámetros. Al igual que Java o Kotlin, TypeScript permite el paso de un número variable de parámetros. En TypeScript se llama _'rest parameters'_ y se indica mediante tres puntos (...) delante del nombre del parámetro:
 
@@ -1163,14 +1176,16 @@ console.log(getFullName("Thomas", "Claudius", "Huber"));
 console.log(getFullName("Thomas", "Claudius", "Huber", "Developer"));
 ```
 
-En el ejemplo aunque parece que la función acepta un array de strings, los puntos (...) indican que lo que acepta es un número variable de parámetros de tipo `string`. Dentro de la función este número variable de parámetros se manejará como un array de strings.
+En el ejemplo aunque parece que la función acepta un array de strings, los puntos (...) indican que lo que acepta es un número variable de parámetros de tipo `string`. Dentro de la función este número variable de parámetros se manejará como un array de cadenas.
 
-Si tenemos un array de strings, podemos hacer la llamada a la función añadiendo los tres puntos (...) delante del nombre del array:
+Si tenemos un array de cadenas, podemos hacer la llamada a la función añadiendo los tres puntos (...) delante del nombre del array:
 
 ```typescript
 let additionalNames: string[]= ["Claudius", "Huber", "Developer"];
 console.log(getFullName("Thomas", ...additionalNames));
 ```
+
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/functions.html#rest-parameters)
 
 ### 'Async' y 'Await'
 
@@ -1182,7 +1197,7 @@ function delay(ms: number) {
 }
 ```
 
-Cuando tenemos un objeto `Promise` podemos usar la palabra clave `await` para esperar a al objeto `Promise`. La función donde se utilice `await` tiene que ser marcada como asíncrona con la palabra clave `async`:
+Cuando tenemos un objeto `Promise` podemos usar la palabra clave `await` para esperar al objeto `Promise`. La función donde se utilice `await` tiene que ser marcada como asíncrona con la palabra clave `async`:
 
 ```typescript
 async function main() {
@@ -1202,13 +1217,13 @@ main();
 
 Los módulos sirven para estructurar el código en múltiples ficheros `.ts` en vez de escribir todo el código en un único fichero. Cada fichero tendrá su propio ámbito cuando se usan módulos por lo que hay que exportar explícitamente clases o variables para luego ser importadas y utilizadas en otros ficheros.
 
-Los módulos se incluyen de forma nativa en ES2015 y por tanto también están disponibles en TypeScript. Con TypeScript se pueden compilar los módulos para ES5 o ES3.
+Los módulos se incluyen de forma nativa en la especificación ES2015 y por tanto también están disponibles en TypeScript. Con TypeScript se pueden compilar los módulos para ES5 o ES3.
 
-Además de los módulos, TypeScript tiene soporte para los _'namespaces'_ o espacios de nombre que tiene un objetivo similar. Dado que los espacios de nombre es un concepto de TypeScript y los módulos forman parte de ES2015 se recomienda su uso. En Angular se utiliza el concepto de módulos.
+Además de los módulos, TypeScript tiene soporte para los _'namespaces'_ o espacios de nombre que tiene un objetivo similar. Dado que los espacios de nombre es un concepto de TypeScript y los módulos forman parte de ES2015 se recomienda el uso de los módulos. En Angular también se utiliza el concepto de módulos.
 
 Los navegadores no tienen la capacidad de cargar los módulos por sí mismos, por lo que se necesita un _'module loader'_. Un cargador de módulos recorre todas las dependencias del módulo raíz. Según las declaraciones de importación, un cargador de módulos encontrará todos los archivos `.js` necesarios y los cargará en consecuencia.
 
-Hay muchos formatos de módulos (es2015, commonjs, system, amd, umd). Dependiendo del cargador de módulos utilizado, tendremos que indicar el formato en el fichero `tsconfig.json` para que sean compatibles:
+Hay muchos formatos de módulos ('es2015', 'commonjs', 'system', 'amd', 'umd'). Dependiendo del cargador de módulos utilizado, tendremos que indicar el formato en el fichero `tsconfig.json` para que sean compatibles:
 
 ```json
 {
@@ -1221,22 +1236,24 @@ Hay muchos formatos de módulos (es2015, commonjs, system, amd, umd). Dependiend
 }
 ```
 
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/modules.html)
+
 ### Basics
 
 Un módulo es un fichero `.ts` si tiene al menos un `import` o un `export` en el nivel raíz del fichero.
 
 La ventaja de aplicar el concepto de módulos es que en los módulos el código se ejecuta en su ámbito y no de forma global, lo que significa que variables, funciones, clases, etc... declaradas dentro de un módulo **sólo** son visibles dentro de ese módulo hasta que no se exportan de forma explícita. A la inversa, para utilizar variables, clases, funciones, etc.. que han sido exportadas en otro módulo tienen que ser importadas para poder ser utilizadas.
 
-Un fichero `.ts` que no contiene ningún `export` o `import` a nivel de fichero se considera un *script* cuyo contenido es de ámbito global y por tanto está disponible de forma general, incluso también para los módulos.
+Un fichero `.ts` que no contiene ningún `export` o `import` a nivel de fichero se considera un _'script'_ cuyo contenido es de ámbito global y por tanto está disponible de forma general, incluso también para los módulos.
 
 ### Export
 
 Cualquier declaración de variable, función, clase, alias o interfaz puede ser exportado añadiendo la palabra clave `export`:
 
 ```typescript
-// friends.ts
+// ---- friends.ts
 class Friend {
-  constructor(public firstName: string) { }
+  constructor(public firstName: string) {}
 }
 
 export class Developer extends Friend {
@@ -1251,7 +1268,7 @@ En el ejemplo tenemos la clase `Developer` que hereda de `Friend`. La clase `Dev
 Además de clases e interfaces, también se puede exportar variables y/o funciones:
 
 ```typescript
-// friends.ts
+// ---- friends.ts
 class Friend {
   constructor(public firstName: string) { }
 }
@@ -1264,18 +1281,20 @@ new Friend("Thomas")];
 export function printFriend(friend:Friend){
   console.log(friend.firstName);
 }
+// -------------
 
-// main.ts
+// ---- main.ts
 import { FRIENDS, printFriend } from './friends';
 
 for (let friend of FRIENDS) {
   printFriend(friend);
 }
+// -------------
 ```
 
 #### Export aliases
 
-En determinadas situaciones podemos utilizar un *alias* para nombrar la variable, clase, etc... que va a ser exportada con la palabra clave `as` para por ejemplo evitar conflictos de nombres o evitar que sean visibles los nombres reales:
+En determinadas situaciones podemos utilizar un _alias_ para nombrar la variable, clase, etc... que va a ser exportada con la palabra clave `as` para por ejemplo evitar conflictos de nombres o evitar que sean visibles los nombres reales:
 
 ```typescript
 // ...
@@ -1292,13 +1311,15 @@ export {Developer as Coder};
 Cuando en la exportación se utiliza un alias, cuando importemos el módulo en otro módulo sólo será visible el alias y no los nombres reales:
 
 ```typescript
-// friends.ts
+// ---- friends.ts
 export {Developer as Coder};
+// -------------
 
-// main.ts
+// ---- main.ts
 import { Coder } from './friends';
 
 let dev = new Coder("John");  // 'Developer' classname is not visible
+// -------------
 ```
 
 #### Export multiple types
@@ -1324,10 +1345,10 @@ export { Developer, Skateboarder };
 
 #### Default export
 
-Cada módulo puede exportar opcionalmente una exportación predeterminada o por defecto. Esta exportación predeterminada se indica con la palabra clave `default` y solo puede haber una exportación por defecto en un módulo:
+Cada módulo puede exportar opcionalmente una exportación predeterminada o por defecto. Esta exportación predeterminada se indica con la palabra clave `default` y sólo puede haber una exportación por defecto en un módulo:
 
 ```typescript
-// friends.ts
+// ---- friends.ts
 class Friend {
   constructor(public firstName: string) { }
 }
@@ -1340,7 +1361,7 @@ export default class Developer extends Friend {
 Para importar un módulo por defecto no se necesitan las llaves ('{}') ni es necesario usar el nombre empleado en la exportación:
 
 ```typescript
-// main.ts
+// ---- main.ts
 import Coder from './friends';
 
 let prog = new Coder("John");
@@ -1349,7 +1370,7 @@ let prog = new Coder("John");
 En un mismo fichero puede haber una exportación por defecto y otras exportaciones:
 
 ```typescript
-// friends.ts
+// ---- friends.ts
 export class Friend {
   constructor(public firstName: string) { }
 }
@@ -1357,11 +1378,13 @@ export class Friend {
 export default class Developer extends Friend {
   // ...
 }
+// -------------
 
-// main.ts
+// ---- main.ts
 import Coder, {Friend} from './friends';
 
 let prog = new Coder("John");
+// -------------
 ```
 
 ### Import
@@ -1369,7 +1392,7 @@ let prog = new Coder("John");
 Para poder utilizar la clase `Developer` deberemos importarla:
 
 ```typescript
-// main.ts
+// ---- main.ts
 import { Developer } from './friends';  // Declaración 'import' con el path del fichero. No es necesario indicar la extensión '.js'
 
 let dev = new Developer("John", "Doe");
@@ -1380,7 +1403,7 @@ Ahora que el fichero `main.ts` tiene una declaración `import`, también se cons
 
 #### Import aliases
 
-Al igual que en la exportación, podemos usar *alias* para realizar la importación para por ejemplo evitar conflictos de nombres o mejorar la legibilidad del código:
+Al igual que en la exportación, podemos usar _alias_ para realizar la importación para, por ejemplo, evitar conflictos de nombres o mejorar la legibilidad del código:
 
 ```typescript
 import { Developer as Programmer } from './friends';
@@ -1408,25 +1431,20 @@ var boarder = new Friends.Skateboarder("Foo");
 
 ## Declaration Files
 
-<http://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html>
-<http://microsoft.github.io/TypeSearch/>
-<https://www.npmjs.com/~types>
-<http://definitelytyped.org/>
-
 Cuando se utiliza una biblioteca JavaScript existente, TypeScript no conoce los tipos ya que JavaScript no tiene tipos. Sin tipos, no se obtienen errores en tiempo de compilación ya que TypeScript no puede realizar comprobaciones de tipos.
 
-Es por eso que TypeScript admite archivos de declaración para bibliotecas JavaScript existentes. El archivo de declaración es un archivo TypeScript normal que por convención termina con `d.ts` y contiene las declaraciones de tipo para esta biblioteca.
+Es por eso que TypeScript admite archivos de declaración para bibliotecas JavaScript existentes. El archivo de declaración es un archivo TypeScript normal que por convención termina con `d.ts` y contiene las declaraciones de tipo para dicha biblioteca.
 
 Por ejemplo, pongamos que tenemos una pequeña biblioteca Javascript con una única función:
 
 ```javascript
-// myLibrary.js
+// ---- myLibrary.js
 function printFirstName(friend) {
   document.write("Firstname is " + friend.firstName);
 }
 ```
 
-De forma que la podemos utilizar en una página html:
+De forma que podemos utilizar dicha biblioteca y el método que contiene en una página web:
 
 ```html
 <!DOCTYPE html>
@@ -1444,7 +1462,7 @@ De forma que la podemos utilizar en una página html:
 En TypeScript podemos utilizar una librería Javascript dado que TypeScript es un superconjunto de Javascript y el código TypeScript se compila en código Javascript:
 
 ```typescript
-// main.ts
+// ---- main.ts
 let friend = { firstName: "Thomas" };
 printFirstName(friend);
 ```
@@ -1453,12 +1471,14 @@ Este código funciona pero no hay ningún tipo y además TypeScript muestra un e
 
 Para deshacerse del error y obtener una escritura estática que permita pasar un parámetro correcto a la función `printFirstName(friend)`, podemos declarar la función `printFirstName(friend Friend)` incluyendo una interfaz para su parámetro, como por ejemplo `Friend`.
 
+[Más información en la documentación oficial.](http://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html)
+
 ### Declarar una función
 
-Podemos declarar una función en TypeScript usando la palabra clave `declare`. De esta forma TypeScript conoce la función, aunque esté implementada en otro sitio como un biblioteca de terceros. Además, con el uso de una interfaz, el compilador puede realizar la comprobación de tipos generando un error en tiempo de compilación:
+Podemos declarar una función en TypeScript usando la palabra clave `declare`. De esta forma TypeScript conoce la función, aunque esté implementada en otro sitio como un biblioteca de terceros.  En el ejemplo la función `printFirstName(friend)` se encuentra implementada en el fichero `myLibrary.js` pero se declara en el fichero `main.ts`. Además, con el uso de una interfaz, el compilador puede realizar la comprobación de tipos generando un error en tiempo de compilación:
 
 ```typescript
-// main.ts
+// ---- main.ts
 interface Friend {
   firstName: string;
 }
@@ -1472,17 +1492,18 @@ printFirstName(friend);
 
 #### Declaraciones en bibliotecas de NPM
 
-Cuando se usan bibliotecas de terceros desde NPM en TypeScript tampoco disponemos de los tipos.
+Cuando se usan bibliotecas de terceros desde _NPM_ en TypeScript tampoco disponemos de los tipos.
 
-Para usar la biblioteca _'lodash'_ la instalamos vía NPM:
+Como ejemplo, si queremos usar la biblioteca _'lodash'_ en nuestro proyecto, primero la instalamos vía _NPM_:
 
 ```terminal
 npm install lodash --save
 ```
 
-Lo que nos permite usar la biblioteca en nuestro proyecto, como por ejemplo:
+A continuación, para utilizar alguna función como por ejemplo la función `range` de la bibliteca _'lodash'_, se importa en el fichero `.ts` que contiene nuestro código:
 
 ```typescript
+// ---- main.ts
 import { range } from 'lodash';
 
 let chapters = range(1, 12);
@@ -1493,9 +1514,9 @@ for (let num in chapters) {
 
 TypeScript no dispone de los tipos con lo cual TypeScript asume que `range(x: any, y:any): any`. Además, tampoco tenemos disponible el autocompletado de IDE ni la documentación, etc...
 
-Para ellos podemos instalar la declaración de tipos de la biblioteca _'lodash'_ disponible en NPM. En NPM están las declaraciones de tipos de la mayoría de bibliotecas de terceros. Se puede consultar el listado desde esta [página](http://microsoft.github.io/TypeSearch/) o buscar en el directorio de [NPM](https://www.npmjs.com/~types)
+Para ello podemos instalar la declaración de tipos de la biblioteca _'lodash'_ disponible en _NPM_. En _NPM_ están las declaraciones de tipos de la mayoría de bibliotecas de terceros. Se puede consultar el listado desde esta [página](http://microsoft.github.io/TypeSearch/) o buscar en el directorio de [NPM](https://www.npmjs.com/~types). Microsoft tiene un [repositorio](http://definitelytyped.org/) de definición de tipos.
 
-La declaración de tipos es un fichero que por convención es `d.ts`. Por ejemplo el fichero de _'lodash'_ una vez instalado se encuentra en `node_modules/@types/lodash/index.d.ts`. La declaración de tipos se instala vía NPM:
+La declaración de tipos es un fichero que por convención es `d.ts`. Por ejemplo el fichero de _'lodash'_ una vez instalado se encuentra en `node_modules/@types/lodash/index.d.ts`. La declaración de tipos se instala vía _NPM_:
 
 ```terminal
 npm install @types/lodash --save-dev
@@ -1510,7 +1531,7 @@ Para el caso de bibliotecas propias, el compilador de TypeScript puede generar e
 Si por ejemplo tenemos la siguiente biblioteca:
 
 ```typescript
-// main.ts
+// ---- main.ts
 interface Friend {
   firstName: string;
 }
@@ -1537,7 +1558,7 @@ Para generar el fichero de declaración de tipos, se indica en el fichero `tscon
 De esta forma, el compilador TypeScript no sólo generará el fichero `main.js` a partir del fichero `main.ts` sino que también generará el fichero `main.d.ts` que contendrá la declaración de la función y su tipo:
 
 ```typescript
-// main.d.ts
+// ---- main.d.ts
 interface Friend {
   firstName: string;
 }
