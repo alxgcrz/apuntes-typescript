@@ -1,6 +1,6 @@
 # [TypeScript]
 
-TypeScript es un lenguaje cuyo objetivo es facilitar el desarrollo de aplicaciones a gran escala escritas en JavaScript. TypeScript añade conceptos comunes como clases, módulos, interfaces, genéricos y (opcionalmente) tipado estático a JavaScript. Es un superset de JavaScript: todo el código JavaScript es código válido en TypeScript de manera que se puede integrar fácilmente a cualquier proyecto. El compilador TypeScript emite código JavaScript válido y entendible por cualquier navegador que soporte Javascript.
+TypeScript es un lenguaje cuyo objetivo es facilitar el desarrollo de aplicaciones a gran escala escritas en JavaScript. TypeScript añade conceptos comunes como clases, módulos, interfaces, genéricos y (opcionalmente) tipado estático a JavaScript. TypeScript es un _superset_ de JavaScript: todo el código JavaScript es código válido en TypeScript de manera que se puede integrar fácilmente a cualquier proyecto. El compilador TypeScript emite código JavaScript válido y entendible por cualquier navegador que soporte Javascript.
 
 Una forma de instalar TypeScript es via _NPM_: `npm install -g typescript`
 
@@ -226,6 +226,17 @@ La otra forma es usar el tipo de array genérico, `Array<elemType>`:
 
 ```typescript
 let list: Array<number> = [1, 2, 3];
+```
+
+Podemos añadir valores a un array mediante `push()` o mediante asignación directa por posición:
+
+```typescript
+const myArray: number[] = [];
+
+myArray.push(1);
+myArray.push(2);
+myArray.push(3);
+myArray[4] = 4;
 ```
 
 #### Iterar por un array con _`for...of`_ and _`for...in`_
@@ -462,6 +473,18 @@ create(false); // Error
 create(undefined); // Error
 ```
 
+El tipo `object` se puede usar para representar datos en estructuras más complejas. Puede contener propiedades en forma de variables que pueden ser de tipo `string`, `number`, arrays, funciones y otros objetos:
+
+```typescript
+const myObject = {
+  title: 'Example Object',
+  value: 5
+}
+
+console.log(myObject.value);
+console.dir(myObject)
+```
+
 ### Aserciones de tipo
 
 Una aserción de tipo es como una conversión de tipo en otros lenguajes, pero no realiza ninguna verificación especial o reestructuración de datos. Se utiliza la palabra clave `as`:
@@ -487,7 +510,7 @@ Las variables en JavaScript siempre se han declarado con la palabra clave `var`.
 
 ### `var` vs `let`
 
-`let` permite declarar variables limitando su alcance (_scope_) al bloque, declaración, o expresión donde se está usando. Lo anterior diferencia `let` de la palabra clave `var`, la cual define una variable global o local en una función sin importar el ámbito del bloque.
+`let` permite declarar variables limitando su alcance (_'scope'_) al bloque, declaración, o expresión donde se está usando mientras que con `var` se define una variable global o local en una función sin importar el ámbito del bloque.
 
 La declaración de variables con `let` y `const` es similar a `var`. Tan sólo hay que cambiar la palabra clave:
 
@@ -498,13 +521,13 @@ let lastName: string = "Doe";
 const nonChangeableName: string = "Julia";
 ```
 
-La diferencia, como hemos visto, radica en el alcance de cada variable según como su definición.
+La diferencia radica en el alcance de cada variable según como su definición. Es recomendable usar `let` o `const` en vez de `var`.
 
 #### Alcance de bloque
 
 Las variables declaradas con `var` tienen un alcance de función o _'function-scoped'_ mientras que las variables declaradas con `let` tienen un alcance de bloque o _'block-scoped'_ que es más parecido a Java.
 
-En el ejemplo tenemos una variable declarada con `var` dentro del ámbito de un `if`. Debido a que la hemos declarado con un `var`, la variable es accesible desde cualquier punto de la función y por tanto _'sale'_ fuera del ámbito del `if` donde fue declarada:
+En el siguiente ejemplo tenemos una variable declarada con `var` dentro del ámbito de un `if`, lo que se traduce en que la variable es accesible desde cualquier punto de la función, tanto dentro como fuera del ámbito del `if` donde fue declarada:
 
 ```typescript
 function getNumber(init) {
@@ -597,6 +620,78 @@ const friend = { firstName: "Thomas", lastName: "TypeScripter" };
 friend.firstName = "Julia"; // OK
 friend.lastName = "Huber"; // OK
 friend = { firstName: "x", lastName: "y" }; // Error: friend is const
+```
+
+## Control flow
+
+### Estructuras condicionales
+
+```typescript
+// 'if' statement
+const age = 21;
+
+if (age > 40) {
+ // Code to execute if age is greater than 40
+} else if (age > 18) {
+ // Code to execute if age is greater than 18
+ // but less than 41
+} else {
+ // Code to execute in all other cases
+}
+
+// 'switch'
+const styles = {
+  tranditional: 1,
+  modern: 2,
+  postModern: 3,
+  futuristic: 4
+};
+const style = styles.tranditional;
+switch (style) {
+  case styles.tranditional:
+    // Code to execute for traditional style
+    break;
+  case styles.modern:
+    // Code to execute for modern style
+    break;
+  case styles.postModern:
+    // Code to execute for post modern style
+    break;
+  case styles.futuristic:
+    // Code to execute for futuristic style
+    break;
+  default:
+    throw new Error('Style not known: ' + style);
+}
+```
+
+### Estructuras de tipo bucle
+
+```typescript
+// 'for' loop
+const names = ['Lily', 'Rebecca', 'Debbye', 'Ann'];
+
+for (let i = 0; i < names.length; i++) {
+  console.log(names[i]);
+}
+
+for (let name in names) {
+ console.log(name);
+}
+
+// 'while' loop
+let counter = 10;
+
+while (counter > 0) {
+  counter--;
+  console.log(counter);
+}
+
+// 'do-while' loop
+do {
+  counter--;
+  console.log(counter);
+} while (counter > 0);
 ```
 
 ## Interfaces y clases
